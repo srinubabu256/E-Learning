@@ -1,11 +1,13 @@
 services:
   - type: web
-    name: elearning-platform
-    env: python
+    name: e-learning-platform
+    runtime: python
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
     startCommand: gunicorn elearning_project.wsgi:application
     envVars:
       - key: PYTHON_VERSION
-        value: 3.9.0
+        value: 3.10.0
       - key: DEBUG
         value: False
+      - key: SECRET_KEY
+        value: django-insecure-presentation-key-12345
