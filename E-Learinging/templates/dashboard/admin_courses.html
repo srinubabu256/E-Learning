@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Curriculum Management | {{ college.name }}{% endblock %}
+
+{% block content %}
+<div class="animate-fade">
+    <div style="margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end;">
+        <div>
+            <h1 class="fw-800 mb-2" style="font-size: 2.5rem; letter-spacing: -1.5px;">Curriculum Lab</h1>
+            <p class="text-secondary small fw-bold text-uppercase mb-0"><i data-lucide="book-open" style="width: 14px;"></i> {{ college.name }} Scientific Core</p>
+        </div>
+        <a href="/admin/courses/course/add/" class="btn btn-primary small" style="background: var(--admin-color) !important;"><i data-lucide="plus-circle" style="width: 14px;"></i> Register Course</a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for course in courses %}
+        <div class="col">
+            <div class="glass h-100 overflow-hidden border-0 shadow-lg p-3">
+                <div style="height: 120px; border-radius: 12px; overflow: hidden; margin-bottom: 16px; position: relative;">
+                    {% if course.thumbnail %}
+                        <img src="{{ course.thumbnail.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                        <div style="width: 100%; height: 100%; background: linear-gradient(135deg, var(--admin-color), var(--primary-color)); display: flex; align-items: center; justify-content: center;">
+                            <i data-lucide="book" class="text-white" style="width: 32px;"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <h5 class="fw-bold text-white mb-2">{{ course.name }}</h5>
+                <p class="text-secondary x-small fw-bold text-uppercase mb-4">{{ course.faculty.username|default:"General Faculty" }}</p>
+                
+                <div class="d-flex justify-content-between align-items-center mt-auto border-top border-light border-opacity-10 pt-3">
+                    <div class="d-flex gap-2">
+                        <span class="badge bg-success bg-opacity-10 text-success"><i data-lucide="video" style="width: 10px;"></i> {{ course.videos.count }}</span>
+                        <span class="badge bg-primary bg-opacity-10 text-primary"><i data-lucide="help-circle" style="width: 10px;"></i> {{ course.quizzes.count }}</span>
+                    </div>
+                    <a href="/admin/courses/course/{{ course.id }}/change/" class="btn btn-sm btn-secondary p-1 px-3 border-0"><i data-lucide="edit" style="width: 14px;"></i></a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-secondary py-5">No courses registered in this institution yet.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

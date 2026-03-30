@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Learning Hub | E-Learn{% endblock %}
+
+{% block content %}
+<div class="animate-fade">
+    <!-- Header Hero Section -->
+    <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(245, 158, 11, 0.1)); padding: 40px; border-radius: 24px; margin-bottom: 40px; border: 1px solid var(--glass-border);">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="fw-800 mb-2" style="font-size: 3rem; background: linear-gradient(to right, #fff, var(--student-color)); -webkit-background-clip: text; background-clip: text;">Welcome back, {{ user.username }}!</h1>
+                <p class="text-secondary mb-0" style="font-size: 1.1rem;">You have <strong>{{ enrollments.count }}</strong> active courses in your portfolio. Keep pushing your limits!</p>
+            </div>
+            <div class="col-md-4 text-md-end mt-4 mt-md-0">
+                <a href="{% url 'course_list' %}" class="btn btn-primary shadow-lg" style="background: var(--student-color) !important; padding: 14px 28px; font-size: 1rem;">
+                    <i data-lucide="sparkles" style="width: 18px;"></i> Explore New Skills
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="glass p-4 border-0 text-center shadow-lg h-100" style="transition: 0.3s; cursor: default;" onmouseover="this.style.borderColor='var(--student-color)'" onmouseout="this.style.borderColor='var(--glass-border)'">
+                <div class="mb-3 d-inline-flex p-3 rounded-4" style="background: rgba(245, 158, 11, 0.15); color: var(--student-color);">
+                    <i data-lucide="book-open-check" style="width: 28px;"></i>
+                </div>
+                <h2 class="fw-800 mb-1 text-white">{{ enrollments.count|default:"0" }}</h2>
+                <p class="text-secondary small fw-bold text-uppercase mb-0">Courses Enrolled</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass p-4 border-0 text-center shadow-lg h-100" style="transition: 0.3s; cursor: default;" onmouseover="this.style.borderColor='var(--success)'" onmouseout="this.style.borderColor='var(--glass-border)'">
+                <div class="mb-3 d-inline-flex p-3 rounded-4" style="background: rgba(16, 185, 129, 0.15); color: var(--success);">
+                    <i data-lucide="trophy" style="width: 28px;"></i>
+                </div>
+                <h2 class="fw-800 mb-1 text-white">{{ results.count|default:"0" }}</h2>
+                <p class="text-secondary small fw-bold text-uppercase mb-0">Quizzes Passed</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass p-4 border-0 text-center shadow-lg h-100" style="transition: 0.3s; cursor: default;" onmouseover="this.style.borderColor='var(--primary-color)'" onmouseout="this.style.borderColor='var(--glass-border)'">
+                <div class="mb-3 d-inline-flex p-3 rounded-4" style="background: rgba(99, 102, 241, 0.15); color: var(--primary-color);">
+                    <i data-lucide="clock" style="width: 28px;"></i>
+                </div>
+                <h2 class="fw-800 mb-1 text-white">{{ enrollments.count }}</h2>
+                <p class="text-secondary small fw-bold text-uppercase mb-0">Active Progress</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass p-4 border-0 text-center shadow-lg h-100" style="transition: 0.3s; cursor: default;" onmouseover="this.style.borderColor='var(--secondary-color)'" onmouseout="this.style.borderColor='var(--glass-border)'">
+                <div class="mb-3 d-inline-flex p-3 rounded-4" style="background: rgba(236, 72, 153, 0.15); color: var(--secondary-color);">
+                    <i data-lucide="graduation-cap" style="width: 28px;"></i>
+                </div>
+                <h2 class="fw-800 mb-1 text-white">{{ user.college.name|truncatechars:10|default:"Global" }}</h2>
+                <p class="text-secondary small fw-bold text-uppercase mb-0">Institution</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assessments & Materials Grid -->
+    <div class="row g-5">
+        <!-- Left: Course Progress -->
+        <div class="col-lg-7">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-800 mb-0"><i data-lucide="play-circle" style="width: 24px; position: relative; top: -2px; color: var(--student-color);"></i> Resume Learning</h3>
+                <a href="{% url 'course_list' %}" class="text-decoration-none small fw-bold text-uppercase tracking-wider" style="color: var(--student-color);">All Courses <i data-lucide="arrow-right" style="width: 14px;"></i></a>
+            </div>
+
+            <div class="row g-4 mb-5">
+                {% for enrollment in enrollments %}
+                <div class="col-md-12">
+                    <div class="glass h-100 overflow-hidden border-0 shadow-lg p-3" style="transition: 0.3s;">
+                        <div class="d-flex gap-4">
+                            <div style="width: 140px; height: 100px; border-radius: 12px; overflow: hidden; flex-shrink: 0;">
+                                {% if enrollment.course.thumbnail %}
+                                    <img src="{{ enrollment.course.thumbnail.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                {% else %}
+                                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg, var(--student-color), var(--secondary-color)); display: flex; align-items: center; justify-content: center;">
+                                        <i data-lucide="monitor" class="text-white" style="width: 32px;"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between">
+                                    <span class="badge" style="background: rgba(245, 158, 11, 0.1); color: var(--student-color);">{{ enrollment.course.branch.name|default:"Science" }}</span>
+                                    <div class="d-flex gap-2 text-secondary small fw-bold">
+                                        <span class="d-flex align-items-center gap-1"><i data-lucide="video" style="width: 12px;"></i> {{ enrollment.course.videos.count }} Lessons</span>
+                                        <span class="d-flex align-items-center gap-1"><i data-lucide="file-text" style="width: 12px;"></i> {{ enrollment.course.materials.count }} Resources</span>
+                                    </div>
+                                </div>
+                                <h5 class="fw-bold mt-2 mb-3 text-white">{{ enrollment.course.name }}</h5>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="progress" style="height: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 100px; flex-grow: 1;">
+                                        <div class="progress-bar" style="width: 65%; background: var(--student-color); border-radius: 100px;"></div>
+                                    </div>
+                                    <a href="{% url 'course_detail' enrollment.course.id %}" class="btn btn-primary p-2 px-3 border-0" style="background: var(--student-color) !important; border-radius: 8px;">
+                                        <i data-lucide="play" style="width: 16px;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="glass p-5 text-center text-secondary border-dashed border-2">
+                        <i data-lucide="rocket" style="width: 48px; margin-bottom: 20px;"></i>
+                        <p class="mb-0">Your curriculum is empty. Start your journey by enrolling in a course!</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- New Section: Available Quizzes -->
+            <div class="mb-5">
+                <h3 class="fw-800 mb-4 text-white"><i data-lucide="help-circle" style="width: 24px; position: relative; top: -2px; color: var(--student-color);"></i> Available Assessments</h3>
+                <div class="row g-3">
+                    {% for quiz in quizzes|slice:":4" %}
+                        <div class="col-md-6">
+                            <div class="glass p-3 border-0 shadow-sm d-flex justify-content-between align-items-center" style="background: rgba(255, 255, 255, 0.03);">
+                                <div>
+                                    <p class="fw-bold text-white small mb-0">{{ quiz.title }}</p>
+                                    <p class="text-secondary x-small mb-0">{{ quiz.course.name }}</p>
+                                </div>
+                                <a href="{% url 'take_quiz' quiz.id %}" class="btn btn-primary btn-sm rounded-circle p-2" style="background: var(--student-color) !important;"><i data-lucide="play" style="width: 14px;"></i></a>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-12"><p class="text-secondary small py-3">No active assessments available for your courses yet.</p></div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- New Section: Digital Material Library -->
+            <div>
+                <h3 class="fw-800 mb-4 text-white"><i data-lucide="folder-open" style="width: 24px; position: relative; top: -2px; color: var(--student-color);"></i> Course Resources</h3>
+                <div class="row g-3">
+                    {% for enrollment in enrollments %}
+                        {% for material in enrollment.course.materials.all|slice:":2" %}
+                        <div class="col-md-6">
+                            <div class="glass p-3 border-0 shadow-sm d-flex align-items-center gap-3" style="background: rgba(99, 102, 241, 0.05);">
+                                <div class="p-2 rounded-2" style="background: rgba(255, 255, 255, 0.05);"><i data-lucide="file-text" style="width: 18px; color: salmon;"></i></div>
+                                <div class="overflow-hidden">
+                                    <p class="fw-bold text-white small mb-0">{{ material.title|truncatechars:20 }}</p>
+                                    <a href="{{ material.file.url }}" class="text-decoration-none x-small fw-bold" style="color: var(--student-color);" download>Download (PDF)</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Recent Activity / Sidebar -->
+        <div class="col-lg-5">
+            <div class="glass p-4 rounded-4 border-0 mb-4 h-100 shadow-2xl">
+                <h4 class="fw-800 mb-4"><i data-lucide="zap" style="width: 20px; color: var(--student-color);"></i> Official Transcripts</h4>
+                <div class="d-flex flex-column gap-3">
+                    {% for result in results|slice:":8" %}
+                    <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border);">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="fw-bold text-white small">{{ result.quiz.title|truncatechars:25 }}</span>
+                            <span class="badge {% if result.score >= 70 %}bg-success{% else %}bg-warning{% endif %} bg-opacity-10 text-success fw-bold" style="font-size: 0.7rem;">{{ result.score }}%</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="text-secondary small mb-0">{{ result.quiz.course.name }}</p>
+                            <span class="text-secondary x-small">{{ result.quiz.created_at|date:"M d" }}</span>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-secondary small text-center py-4">Complete your first quiz to see your transcript.</p>
+                    {% endfor %}
+                </div>
+                
+                <hr class="my-4 border-light opacity-10">
+                
+                <h4 class="fw-800 mb-4"><i data-lucide="award" style="width: 20px; color: var(--student-color);"></i> Suggested Path</h4>
+                <div class="glass p-4 border-0 text-center" style="background: rgba(99, 102, 241, 0.05);">
+                    <img src="https://ouch-cdn2.icons8.com/UNX0a6c9lB7yM7yM7yM7yM7yM7yM7yM7yM7yM7yM7yM/rs:fit:256:256/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9zdmcvMzg2/LzQ1MTU3MGFjLWIy/ZjAtNDYzZi1hMzU0/LTYxYjE0YjUzYzI1/Ni5zdmc.png" style="width: 80px; margin-bottom: 16px;">
+                    <p class="small text-secondary mb-3">Ready for a challenge? Take the mid-term assessment.</p>
+                    <button class="btn btn-primary w-100 btn-sm" style="background: var(--primary-color) !important;">Launch Exam</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

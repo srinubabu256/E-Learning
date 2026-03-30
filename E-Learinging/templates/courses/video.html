@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Watching: {{ video.title }} | E-Learn{% endblock %}
+
+{% block content %}
+<div class="animate-fade">
+    <div class="row g-4">
+        <!-- Left Side: Video Player -->
+        <div class="col-lg-8">
+            <div class="glass p-0 rounded-4 overflow-hidden mb-4 shadow-lg border-0">
+                <div class="ratio ratio-16x9">
+                    {% if video.video_file %}
+                        <video controls class="w-100 h-100" style="background: black;">
+                            <source src="{{ video.video_file.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    {% else %}
+                        <div class="d-flex align-items-center justify-content-center bg-dark text-secondary">
+                            <div class="text-center">
+                                <i data-lucide="video-off" style="width: 60px; margin-bottom: 20px;"></i>
+                                <p>Video source not available.</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="p-4">
+                    <h2 class="fw-800 mb-2">{{ video.title }}</h2>
+                    <p class="text-secondary small fw-bold text-uppercase mb-4">{{ course.name }} | {{ course.faculty.username }}</p>
+                    <div class="d-flex gap-2">
+                        <span class="badge" style="background: var(--primary-color);">HD</span>
+                        <span class="badge badge-secondary">English</span>
+                        <span class="badge badge-secondary">Subtitles</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabbed Content Below Player -->
+            <div class="glass p-4 rounded-4 shadow-sm border-0 mb-4">
+                <ul class="nav nav-pills mb-3 gap-2" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="btn btn-secondary small active" id="pills-materials-tab" data-bs-toggle="pill" data-bs-target="#pills-materials" type="button" role="tab"><i data-lucide="file-text" style="width: 14px;"></i> Materials</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="btn btn-secondary small" id="pills-quiz-tab" data-bs-toggle="pill" data-bs-target="#pills-quiz" type="button" role="tab"><i data-lucide="help-circle" style="width: 14px;"></i> Quizzes</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-materials" role="tabpanel">
+                        <div class="list-group list-group-flush gap-2">
+                            {% for material in all_materials %}
+                            <a href="{{ material.file.url }}" class="list-group-item list-group-item-action bg-transparent text-white border-0 glass rounded-3 d-flex justify-content-between align-items-center p-3" target="_blank">
+                                <span class="d-flex align-items-center gap-3">
+                                    <i data-lucide="file-down" class="text-primary"></i>
+                                    {{ material.title }}
+                                </span>
+                                <i data-lucide="download" style="width: 16px; color: var(--text-secondary);"></i>
+                            </a>
+                            {% empty %}
+                            <p class="text-secondary py-3 text-center">No materials available for this course.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-quiz" role="tabpanel">
+                        <div class="list-group list-group-flush gap-2">
+                            {% for quiz in all_quizzes %}
+                            <a href="{% url 'take_quiz' quiz.id %}" class="list-group-item list-group-item-action bg-transparent text-white border-0 glass rounded-3 d-flex justify-content-between align-items-center p-3">
+                                <span class="d-flex align-items-center gap-3">
+                                    <i data-lucide="pencil" class="text-secondary"></i>
+                                    {{ quiz.title }}
+                                </span>
+                                <span class="badge badge-primary">Take Quiz</span>
+                            </a>
+                            {% empty %}
+                            <p class="text-secondary py-3 text-center">No quizzes created for this course yet.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Video List -->
+        <div class="col-lg-4">
+            <div class="glass p-4 rounded-4 shadow-lg border-0 h-100">
+                <h4 class="fw-800 mb-4">Course Content</h4>
+                <div class="d-flex flex-column gap-3 overflow-auto" style="max-height: 800px;">
+                    {% for v in all_videos %}
+                    <a href="{% url 'watch_video' v.id %}" class="glass p-3 rounded-3 text-decoration-none d-flex gap-3 align-items-center video-item {% if v.id == video.id %}active{% endif %}">
+                        <div style="width: 60px; height: 40px; border-radius: 6px; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; position: relative;">
+                            <i data-lucide="play" style="width: 14px; color: white;"></i>
+                            <span class="position-absolute bottom-0 end-0 bg-dark small px-1 rounded-1" style="font-size: 0.6rem;">12:00</span>
+                        </div>
+                        <div>
+                            <p class="mb-0 text-white small fw-bold">{{ v.title }}</p>
+                            <span class="text-secondary" style="font-size: 0.7rem;">Session {{ forloop.counter }}</span>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

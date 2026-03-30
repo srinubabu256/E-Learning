@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Assessment History | E-Learn{% endblock %}
+
+{% block content %}
+<div class="animate-fade">
+    <div style="margin-bottom: 40px; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+            <h1 class="fw-800 mb-2" style="font-size: 3rem; background: linear-gradient(to right, #fff, var(--student-color)); -webkit-background-clip: text; background-clip: text;">Assessment History</h1>
+            <p class="text-secondary small fw-bold text-uppercase mb-0 tracking-widest"><i data-lucide="award" style="width: 14px; color: var(--student-color);"></i> Performance Review & Certification Tracking</p>
+        </div>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary small"><i data-lucide="arrow-left" style="width: 14px;"></i> Dashboard</a>
+    </div>
+
+    <div class="glass p-0 rounded-4 shadow-lg border-0 overflow-hidden" style="background: rgba(15, 23, 42, 0.4);">
+        <div class="table-responsive">
+            <table class="table table-borderless align-middle mb-0" style="color: var(--text-secondary) !important;">
+                <thead class="fw-bold border-bottom border-light border-opacity-10" style="background: rgba(255, 255, 255, 0.02);">
+                    <tr>
+                        <th class="py-4 px-4 fw-bold text-white small text-uppercase tracking-wider">Attempt Details</th>
+                        <th class="py-4 px-4 fw-bold text-white small text-uppercase tracking-wider">Curriculum</th>
+                        <th class="py-4 px-4 fw-bold text-white small text-uppercase tracking-wider text-center">Outcome</th>
+                        <th class="py-4 px-4 fw-bold text-white small text-uppercase tracking-wider text-center">Certification Date</th>
+                        <th class="py-4 px-4 fw-bold text-white small text-uppercase tracking-wider text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-white">
+                    {% for result in results %}
+                    <tr class="border-bottom border-light border-opacity-10" style="transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                        <td class="py-4 px-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="p-2 rounded-3 bg-opacity-10 bg-white"><i data-lucide="clipboard-list" style="width: 18px; color: var(--student-color);"></i></div>
+                                <span class="fw-bold text-white">{{ result.quiz.title }}</span>
+                            </div>
+                        </td>
+                        <td class="py-4 px-4">
+                            <span class="text-secondary small fw-medium">{{ result.quiz.course.name }}</span>
+                        </td>
+                        <td class="py-4 px-4 text-center">
+                            <div class="d-flex flex-column align-items-center">
+                                <span class="badge {% if result.score >= 70 %}bg-success{% elif result.score >= 40 %}bg-warning{% else %}bg-danger{% endif %} text-white px-3 py-2 fw-bold" style="font-size: 0.9rem; min-width: 60px;">
+                                    {{ result.score }}%
+                                </span>
+                                <span class="text-secondary x-small mt-1 fw-bold">{% if result.score >= 70 %}Passed{% else %}Failed{% endif %}</span>
+                            </div>
+                        </td>
+                        <td class="py-4 px-4 text-center small text-secondary fw-medium">{{ result.quiz.created_at|date:"M d, Y" }}</td>
+                        <td class="py-4 px-4 text-end">
+                            <button class="btn btn-primary btn-sm p-2 px-3 border-0" style="background: rgba(255,255,255,0.05) !important; color: white;"><i data-lucide="printer" style="width: 16px;"></i></button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="py-5 text-center text-secondary small lh-lg">
+                            <i data-lucide="file-x" style="width: 48px; display: block; margin: 0 auto 16px; opacity: 0.3;"></i>
+                            You haven't attempted any assessments yet.<br>
+                            <a href="{% url 'course_list' %}" class="text-decoration-none fw-bold" style="color: var(--student-color);">Start a course and verify your skills!</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.x-small { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; }
+</style>
+{% endblock %}

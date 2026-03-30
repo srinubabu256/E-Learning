@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Super Admin Controller | E-Learn{% endblock %}
+
+{% block content %}
+<div class="animate-fade">
+    <!-- Hero Section -->
+    <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1)); padding: 60px; border-radius: 40px; margin-bottom: 50px; border: 1px solid var(--glass-border); position: relative; overflow: hidden;">
+        <div style="position: absolute; top: -50px; right: -50px; width: 300px; height: 300px; background: var(--primary-color); filter: blur(150px); opacity: 0.15;"></div>
+        <div style="position: relative; z-index: 1;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <span class="badge" style="background: rgba(99, 102, 241, 0.2); color: var(--primary-color); border: 1px solid rgba(99, 102, 241, 0.3); font-weight: 800; padding: 6px 16px;">System Master</span>
+                <span style="font-size: 0.9rem; color: var(--text-secondary); font-weight: bold; text-transform: uppercase; letter-spacing: 2px;">V4.0 Infrastructure</span>
+            </div>
+            <h1 style="font-size: 3.5rem; margin-bottom: 15px; font-weight: 900; letter-spacing: -2px; line-height: 1.1;">Control Center <span style="background: linear-gradient(to right, #6366f1, #ec4899); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Advanced</span></h1>
+            <p style="color: var(--text-secondary); max-width: 600px; font-size: 1.2rem; line-height: 1.6;">Global management of all academic institutions, faculty resources, and system-wide analytic engines.</p>
+        </div>
+    </div>
+
+    <!-- Main Statistics Grid -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-3">
+            <div class="glass p-5 rounded-4 shadow-lg border-0 h-100" onmouseover="this.style.borderColor='var(--superadmin-color)'" onmouseout="this.style.borderColor='transparent'" style="transition: 0.3s; cursor: default;">
+                <div style="width: 50px; height: 50px; background: rgba(30, 58, 138, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; color: var(--superadmin-color);">
+                    <i data-lucide="building-2"></i>
+                </div>
+                <h4 class="text-secondary small fw-bold text-uppercase mb-2">Colleges</h4>
+                <div style="display: flex; align-items: flex-end; gap: 10px;">
+                    <h2 class="fw-900 mb-0" style="font-size: 2.8rem;">{{ total_colleges|default:"0" }}</h2>
+                    <span class="text-success small mb-2 fw-bold"><i data-lucide="arrow-up-right" style="width: 14px;"></i> 12%</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="glass p-5 rounded-4 shadow-lg border-0 h-100" style="transition: 0.3s;">
+                <div style="width: 50px; height: 50px; background: rgba(124, 58, 237, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; color: var(--admin-color);">
+                    <i data-lucide="shield-check"></i>
+                </div>
+                <h4 class="text-secondary small fw-bold text-uppercase mb-2">Verified Admins</h4>
+                <div style="display: flex; align-items: flex-end; gap: 10px;">
+                    <h2 class="fw-900 mb-0" style="font-size: 2.8rem;">{{ total_courses|default:"0" }}</h2>
+                    <span class="text-secondary small mb-2 fw-bold">Live</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="glass p-5 rounded-4 shadow-lg border-0 h-100" style="transition: 0.3s;">
+                <div style="width: 50px; height: 50px; background: rgba(16, 185, 129, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; color: var(--faculty-color);">
+                    <i data-lucide="award"></i>
+                </div>
+                <h4 class="text-secondary small fw-bold text-uppercase mb-2">Global Faculty</h4>
+                <div style="display: flex; align-items: flex-end; gap: 10px;">
+                    <h2 class="fw-900 mb-0" style="font-size: 2.8rem;">{{ total_faculty|default:"0" }}</h2>
+                    <span class="text-success small mb-2 fw-bold"><i data-lucide="award" style="width: 14px;"></i> Active</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="glass p-5 rounded-4 shadow-lg border-0 h-100" style="transition: 0.3s;">
+                <div style="width: 50px; height: 50px; background: rgba(245, 158, 11, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; color: var(--student-color);">
+                    <i data-lucide="users-2"></i>
+                </div>
+                <h4 class="text-secondary small fw-bold text-uppercase mb-2">Students Enrolled</h4>
+                <div style="display: flex; align-items: flex-end; gap: 10px;">
+                    <h2 class="fw-900 mb-0" style="font-size: 2.8rem;">{{ total_students|default:"0" }}</h2>
+                    <span class="text-warning small mb-2 fw-bold">Global Network</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- College Management Card -->
+    <div class="glass p-0 rounded-4 shadow-2xl border-0 overflow-hidden mb-5">
+        <div style="padding: 40px; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h3 class="fw-800 mb-1">Academic Institutions</h3>
+                <p class="text-secondary small mb-0">List of all colleges within the network infrastructure</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-secondary small">Generate Report</button>
+                <a href="{% url 'create_college' %}" class="btn btn-primary small fw-800"><i data-lucide="plus" style="width: 14px;"></i> Register College</a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0" style="background: transparent;">
+                <thead style="background: rgba(0,0,0,0.2);">
+                    <tr>
+                        <th class="py-4 px-5 fw-bold text-secondary text-uppercase small">College Identity</th>
+                        <th class="py-4 px-5 fw-bold text-secondary text-uppercase small">Region</th>
+                        <th class="py-4 px-5 fw-bold text-secondary text-uppercase small">Status</th>
+                        <th class="py-4 px-5 fw-bold text-secondary text-uppercase small text-center">Faculty Count</th>
+                        <th class="py-4 px-5 fw-bold text-secondary text-uppercase small text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-white border-0">
+                    {% for college in colleges %}
+                    <tr class="border-light border-opacity-10 transition hover-bg" onclick="location.href='/admin/college/college/{{ college.id }}/change/'" style="cursor: pointer;">
+                        <td class="py-4 px-5">
+                            <div class="d-flex align-items-center gap-3">
+                                <div style="width: 40px; height: 40px; background: var(--superadmin-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800;">{{ college.name|slice:":1"|upper }}</div>
+                                <span class="fw-bold">{{ college.name }}</span>
+                            </div>
+                        </td>
+                        <td class="py-4 px-5 text-secondary fw-medium small">{{ college.location|default:"Global Access" }}</td>
+                        <td class="py-4 px-5"><span class="badge rounded-pill bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2">Operational</span></td>
+                        <td class="py-4 px-5 text-center fw-bold">{{ college.users.count|add:college.total_courses }}</td>
+                        <td class="py-4 px-5 text-end"><i data-lucide="arrow-right-circle" style="width: 20px; color: var(--text-secondary);"></i></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="py-5 text-center text-secondary py-5">
+                            <i data-lucide="search-x" style="width: 48px; opacity: 0.2; margin-bottom: 20px;"></i>
+                            <p>No colleges found. Register an institution to begin management.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fw-900 { font-weight: 900; }
+    .transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .hover-bg:hover { background: rgba(99, 102, 241, 0.05) !important; }
+</style>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ course.name }} | E-Learn{% endblock %}
+
+{% block content %}
+<div class="animate-fade">
+    <div style="display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: flex-start;">
+        <!-- Left Column: Course Details -->
+        <div>
+            <div style="margin-bottom: 40px;">
+                <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+                    <span class="badge badge-primary">Development</span>
+                    <span class="badge badge-secondary">4.9 ★ (1,240 Reviews)</span>
+                </div>
+                <h1 style="font-size: 3.5rem; margin-bottom: 24px; letter-spacing: -2px; line-height: 1.1;">{{ course.name }}</h1>
+                <p style="color: var(--text-secondary); font-size: 1.2rem; line-height: 1.8; margin-bottom: 40px;">
+                    {{ course.description|linebreaksbr }}
+                </p>
+                
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 60px; padding: 24px; border-radius: 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);">
+                    <div style="width: 54px; height: 54px; border-radius: 50%; border: 3px solid var(--primary-color); padding: 3px;">
+                        {% if course.faculty.profile_pic %}
+                            <img src="{{ course.faculty.profile_pic.url }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        {% else %}
+                            <div style="width: 100%; height: 100%; border-radius: 50%; background: var(--bg-color); display: flex; align-items: center; justify-content: center; font-weight: 800;">
+                                {{ course.faculty.username|slice:":1"|upper }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px;">Taught By</p>
+                        <p style="font-size: 1.1rem; font-weight: 700;">{{ course.faculty.username }}</p>
+                    </div>
+                </div>
+
+                <!-- Course Content Preview -->
+                <h3 style="margin-bottom: 30px; font-size: 1.5rem;">Course Curriculum</h3>
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    {% if course.videos.all %}
+                        {% for video in course.videos.all %}
+                        <div class="glass" style="padding: 20px; border-radius: 16px; display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 16px;">
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); display: flex; align-items: center; justify-content: center;">
+                                    <i data-lucide="play-circle" style="width: 16px; color: var(--primary-color);"></i>
+                                </div>
+                                <span style="font-weight: 600;">{{ video.title }}</span>
+                            </div>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">12:45</span>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="color: var(--text-secondary);">No curriculum content added yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Sidebar / Join -->
+        <div class="glass" style="padding: 30px; border-radius: 24px; position: sticky; top: 110px;">
+            {% if course.thumbnail %}
+                <img src="{{ course.thumbnail.url }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 16px; margin-bottom: 24px;">
+            {% else %}
+                <div style="width: 100%; height: 200px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(236, 72, 153, 0.2)); border-radius: 16px; margin-bottom: 24px; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="image" style="width: 48px; color: rgba(255, 255, 255, 0.1);"></i>
+                </div>
+            {% endif %}
+
+            <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 2rem; font-weight: 800; color: white;">FREE</span>
+                <span style="color: var(--text-secondary); text-decoration: line-through;">$99.99</span>
+            </div>
+
+            <div style="margin-bottom: 30px;">
+                <p style="font-weight: 700; font-size: 0.9rem; margin-bottom: 16px;">This course includes:</p>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--text-secondary);">
+                        <i data-lucide="video" style="width: 16px;"></i> 12.5 hours of on-demand video
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--text-secondary);">
+                        <i data-lucide="file-text" style="width: 16px;"></i> 8 Downloadable resources
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--text-secondary);">
+                        <i data-lucide="infinity" style="width: 16px;"></i> Full lifetime access
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--text-secondary);">
+                        <i data-lucide="smartphone" style="width: 16px;"></i> Access on mobile and TV
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--text-secondary);">
+                        <i data-lucide="award" style="width: 16px;"></i> Certificate of completion
+                    </div>
+                </div>
+            </div>
+
+            {% if user.is_authenticated %}
+                {% if is_enrolled %}
+                    <a href="{% url 'dashboard' %}" class="btn btn-secondary" style="width: 100%; justify-content: center; padding: 16px; font-size: 1rem;">Go to Dashboard</a>
+                {% else %}
+                    <a href="{% url 'enroll_course' course.pk %}" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 16px; font-size: 1.1rem; margin-bottom: 12px;">Enroll Now</a>
+                    <p style="font-size: 0.75rem; color: var(--text-secondary); text-align: center;">By clicking "Enroll Now", you agree to our Terms of Service.</p>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 16px; font-size: 1.1rem;">Login to Enroll</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Student Directory | {{ college.name }}{% endblock %}
+
+{% block content %}
+<div class="animate-fade">
+    <div style="margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end;">
+        <div>
+            <h1 class="fw-800 mb-2" style="font-size: 2.5rem; letter-spacing: -1.5px;">Student Directory</h1>
+            <p class="text-secondary small fw-bold text-uppercase mb-0"><i data-lucide="users" style="width: 14px;"></i> {{ college.name }} Enrollment Base</p>
+        </div>
+        <a href="/admin/accounts/user/add/" class="btn btn-primary small" style="background: var(--admin-color) !important;"><i data-lucide="user-plus" style="width: 14px;"></i> Register Student</a>
+    </div>
+
+    <div class="glass p-0 rounded-4 shadow-lg border-0 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-borderless align-middle mb-0 text-secondary">
+                <thead class="fw-bold border-bottom border-light border-opacity-10" style="background: rgba(255, 255, 255, 0.02);">
+                    <tr>
+                        <th class="py-4 px-4 fw-bold text-white small text-uppercase">Student Name</th>
+                        <th class="py-4 px-4 fw-bold text-white small text-uppercase">Email</th>
+                        <th class="py-4 px-4 fw-bold text-white small text-uppercase">College Branch</th>
+                        <th class="py-4 px-4 fw-bold text-white small text-uppercase text-center">Enrolled</th>
+                        <th class="py-4 px-4 fw-bold text-white small text-uppercase text-end">Manage</th>
+                    </tr>
+                </thead>
+                <tbody class="text-white">
+                    {% for student in students %}
+                    <tr class="border-bottom border-light border-opacity-10">
+                        <td class="py-4 px-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div style="width: 32px; height: 32px; background: var(--student-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem;">{{ student.username|slice:":1"|upper }}</div>
+                                <span class="fw-bold">{{ student.username }}</span>
+                            </div>
+                        </td>
+                        <td class="py-4 px-4 text-secondary small">{{ student.email }}</td>
+                        <td class="py-4 px-4 text-secondary small">{{ student.college.name|default:"General" }}</td>
+                        <td class="py-4 px-4 text-center"><span class="badge bg-primary bg-opacity-10 text-primary">Active</span></td>
+                        <td class="py-4 px-4 text-end">
+                            <button class="btn btn-sm btn-secondary p-1 px-2"><i data-lucide="edit-3" style="width: 14px;"></i></button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="5" class="py-5 text-center text-secondary small">No students registered in this institution yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
